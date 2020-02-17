@@ -78,7 +78,7 @@ uint16_t adc_single_read(ADC_TypeDef *adc, uint32_t chsel)
 int16_t adc_vbat_read(ADC_TypeDef *adc)
 {
 #define ADC_FULL_SCALE 3300
-#define VBAT_DIODE_VF 500
+#define VBAT_DIODE_VF 460  /* was 500; adjusted for 1n4148 */
 #define VREFINT_CAL (*((uint16_t*)0x1FFFF7BA))
 	float vbat = 0;
 	float vrefint = 0;

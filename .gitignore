@@ -10,3 +10,5 @@ python
 TAGS
 .emacs-dirvars
 *png
+.vscode/settings.json
+ChibiOS

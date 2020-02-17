@@ -605,7 +605,7 @@ float cal_data[5][101][2];
 config_t config = {
   .magic =             CONFIG_MAGIC,
   .dac_value =         1922,
-  .grid_color =        0x1084,
+  .grid_color =        0x0002, /* was 0x1084 which is too bright; I want old-oscilloscope green. */
   .menu_normal_color = 0xffff,
   .menu_active_color = 0x7777,
   .trace_color =       { RGB565(0,255,255), RGB565(255,0,40), RGB565(0,0,255), RGB565(50,255,0) },
@@ -613,6 +613,7 @@ config_t config = {
   .touch_cal =         { 338, 522, 153, 192 },  // 2.8 inch LCD panel
   .default_loadcal =   0,
   .harmonic_freq_threshold = 300000000,
+  .callsign =          "K5DRU",  /* sorry.  put yours here if you want.  used at the bottom of plot.c */
   .checksum =          0
 };
 

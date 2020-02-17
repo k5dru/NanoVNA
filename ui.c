@@ -393,7 +393,7 @@ show_version(void)
   adc_stop(ADC1);
   ili9341_fill(0, 0, 320, 240, 0);
 
-  ili9341_drawstring_size(BOARD_NAME, x, y, 0xffff, 0x0000, 4);
+  ili9341_drawstring_size(BOARD_NAME "-K5DRU", x, y, 0xffff, 0x0000, 4);
   y += 25;
 
   ili9341_drawstring_5x7("2016-2019 Copyright @edy555", x, y += 10, 0xffff, 0x0000);
@@ -944,10 +944,10 @@ const menuitem_t menu_calop[] = {
 };
 
 const menuitem_t menu_save[] = {
-  { MT_CALLBACK, "SAVE 0", menu_save_cb },
-  { MT_CALLBACK, "SAVE 1", menu_save_cb },
-  { MT_CALLBACK, "SAVE 2", menu_save_cb },
-  { MT_CALLBACK, "SAVE 3", menu_save_cb },
+  { MT_CALLBACK, "SAVE HF", menu_save_cb },
+  { MT_CALLBACK, "SAVE VHF", menu_save_cb },
+  { MT_CALLBACK, "SAVE UHF", menu_save_cb },
+  { MT_CALLBACK, "SAVE GHZ", menu_save_cb },
   { MT_CALLBACK, "SAVE 4", menu_save_cb },
   { MT_CANCEL, S_LARROW" BACK", NULL },
   { MT_NONE, NULL, NULL } // sentinel
@@ -1092,10 +1092,10 @@ const menuitem_t menu_marker[] = {
 };
 
 const menuitem_t menu_recall[] = {
-  { MT_CALLBACK, "RECALL 0", menu_recall_cb },
-  { MT_CALLBACK, "RECALL 1", menu_recall_cb },
-  { MT_CALLBACK, "RECALL 2", menu_recall_cb },
-  { MT_CALLBACK, "RECALL 3", menu_recall_cb },
+  { MT_CALLBACK, "LOAD HF", menu_recall_cb },
+  { MT_CALLBACK, "LOAD VHF", menu_recall_cb },
+  { MT_CALLBACK, "LOAD UHF", menu_recall_cb },
+  { MT_CALLBACK, "LOAD GHZ", menu_recall_cb },
   { MT_CALLBACK, "RECALL 4", menu_recall_cb },
   { MT_CANCEL, S_LARROW" BACK", NULL },
   { MT_NONE, NULL, NULL } // sentinel
@@ -1120,8 +1120,8 @@ const menuitem_t menu_config[] = {
 const menuitem_t menu_top[] = {
   { MT_SUBMENU, "DISPLAY", menu_display },
   { MT_SUBMENU, "MARKER", menu_marker },
-  { MT_SUBMENU, "STIMULUS", menu_stimulus },
-  { MT_SUBMENU, "CAL", menu_cal },
+  { MT_SUBMENU, "FREQUENCY", menu_stimulus },
+  { MT_SUBMENU, "CALIBRATE", menu_cal },
   { MT_SUBMENU, "RECALL", menu_recall },
   { MT_SUBMENU, "CONFIG", menu_config },
   { MT_NONE, NULL, NULL } // sentinel

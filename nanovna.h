@@ -188,6 +188,7 @@ typedef struct {
   int16_t touch_cal[4];
   int8_t default_loadcal;
   uint32_t harmonic_freq_threshold;
+  char callsign[12];  // sorry.  k5dru 
   int32_t checksum;
 } config_t;
 

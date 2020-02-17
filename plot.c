@@ -7,6 +7,7 @@
 
 #define SWAP(x,y) do { int z=x; x = y; y = z; } while(0)
 
+void k5dru(void);
 static void cell_draw_marker_info(int m, int n, int w, int h);
 void frequency_string(char *buf, size_t len, int32_t freq);
 void frequency_string_short(char *buf, size_t len, int32_t freq, char prefix);
@@ -1457,6 +1458,7 @@ draw_all(bool flush)
     draw_frequencies();
   if (redraw_request & REDRAW_CAL_STATUS)
     draw_cal_status();
+  k5dru();
   redraw_request = 0;
 }
 
@@ -1804,6 +1806,32 @@ draw_cal_status(void)
 }
 
 void
+draw_vbat(void)
+{
+  int x = 0;
+  int y = 12;
+  char buf[2] = "X";
+  uint8_t vbati = vbat2bati(vbat);
+  uint16_t col = vbati == 0 ? RGB565(0, 255, 0) : RGB565(0, 0, 240);
+
+#define YSTEP 7
+ // ili9341_fill(0, y, 10, 5*YSTEP, 0x0000);
+  buf[0] = (vbat / 1000) + '0';
+  ili9341_drawstring_5x7(buf, x, y += YSTEP, col, 0x0000);
+  ili9341_drawstring_5x7(".", x, y += YSTEP, col, 0x0000);
+  buf[0] = (vbat % 1000 / 100) + '0';
+  ili9341_drawstring_5x7(buf, x, y += YSTEP, col, 0x0000);
+  buf[0] = (vbat % 100 / 10) + '0';
+  ili9341_drawstring_5x7(buf, x, y += YSTEP, col, 0x0000);
+/* 
+  // last digit is useless
+  buf[0] = (vbat % 10) + '0';
+  ili9341_drawstring_5x7(buf, x, y += YSTEP, col, 0x0000);
+*/
+  ili9341_drawstring_5x7("V", x, y += YSTEP, col, 0x0000);
+}
+
+void
 draw_battery_status(void)
 {
     int w = 10, h = 14;
@@ -1871,6 +1899,8 @@ draw_battery_status(void)
         buf[y * w + x++] = col;
 
     ili9341_bulk(0, 1, w, h);
+
+    draw_vbat();
 }
 
 void
@@ -1893,3 +1923,41 @@ plot_init(void)
 {
   force_set_markmap();
 }
+
+void k5dru(void) { 
+/* personalize with callsign. screen is 320x240 */
+/* callsign is now stored in config.callsign; would like to be able to update it on device */
+  #define RED         0x03e0   // maybe 0x00F0
+  #define GREEN       0x001f   // maybe 0x000F
+  #define BLUE        0xfc00   // maybe 0x1F00  
+  #define DARKRED     0x01e0   // maybe 0x0070
+  #define DARKGREEN   0x0003   // maybe 0x0003
+  #define DARKBLUE    0x7c00   // maybe 0x0E00 
+  #define ORANGE (RED | DARKGREEN)
+  #define YELLOW (RED | GREEN)
+  #define CYAN   (DARKGREEN | BLUE)
+  #define VIOLET (DARKRED | BLUE)
+
+  int x=(320 / 2 - (strlen(config.callsign) * 5 / 2) ), y=233;
+  #define numcolors 7
+  uint16_t colors[numcolors] = {RED, ORANGE, YELLOW, GREEN, CYAN, BLUE, VIOLET};
+  static int ci = -1;
+  char *cs = config.callsign;
+
+  while (*cs) { 
+    ili9341_drawstring_5x7(cs, x += 5, y, colors[++ci > (numcolors - 1) ? (ci = 0) : ci], 0x0000 );  
+    ++cs;
+  }
+  ci++; if (ci > (numcolors - 1)) ci = 0; 
+ 
+ /* //  a way to test grid colors: 
+   { 
+     char buf[8];  chsnprintf(buf, 8, "%04x ", config.grid_color);
+     ili9341_drawstring_5x7(buf, x += 5, y, 0xFFFF , 0x0000);  
+     config.grid_color <<=1;
+     if (config.grid_color == 0)
+        config.grid_color = 0x01;
+   }
+   */
+}
+
